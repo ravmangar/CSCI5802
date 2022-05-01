@@ -51,22 +51,22 @@ class Model(nn.Module):
 class NNModel(Model):
     def __init__(self):
         super().__init__()
-        self.l1 = nn.Linear(2, 5, bias=True)
-        self.act1 = nn.PReLU()
-        self.l2 = nn.Linear(5, 2, bias=True)
-        self.act2 = nn.PReLU()
-        self.l3 = nn.Linear(2, 1, bias=True)
-        self.act3 = nn.Sigmoid()
+        self.l1 = nn.Conv1d(128, 10, 5, stride=1)
+        self.l2 = nn.Conv1d(64, 10, 5, stride=1)
+        self.l3 = nn.MaxPool1d(3, stride =1)
+        self.l4 = nn.Conv1d(2, 3, stride=1)
+        self.act1 = nn.Sigmoid()
 
     def get_intermediary(self, X):
         res = self.l1(X)
         res = self.act1(res)
         res = self.l2(res)
-        res = self.act2(res)
+        res = self.l3(res)
+        res = self.l4(res)
         return res
 
     def forward(self, X):
         res = self.get_intermediary(X)
         res = self.l3(res)
-        res = self.act3(res)
+        res = self.act1(res)
         return res
